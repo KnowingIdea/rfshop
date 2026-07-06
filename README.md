@@ -63,11 +63,13 @@ Leave that window open, then open **http://localhost:8760** in your normal brows
 | Prefer / Exclude vendors | `XMA` | Preferred vendors get a ★ boost; excluded ones are hidden |
 | Other keywords | `BeCu, non-magnetic` | Anything else that matters — these are matched too |
 
-Click **Search**. The *first* search in a category crawls vendor catalogs and takes a few minutes; after that everything is cached for a week and searches take seconds.
+Click **Search**. The *first* search in a category crawls vendor catalogs and takes a few minutes; after that everything is cached for a week and searches take seconds. The 10 best matches are shown; click **Show all** for the full list.
+
+**Have [Claude Code](https://claude.com/claude-code) installed?** The web UI detects it and adds a plain-language search box ("cryo attenuator 1 dB bulkhead SMA, DC-18 GHz, need it within 6 weeks") — Claude parses your request into the form, and after each search automatically verifies specs the scraper couldn't confirm. No API key; uses your subscription.
 
 **Reading the results** (see screenshot above):
 
-- **Tiers:** A = meets every stated criterion · B = meets everything the page actually states (rest unverified) · C = misses one criterion · D = misses more. Within a tier: best fit first, then price.
+- **Tiers:** A = meets every stated criterion · B = meets everything the page actually states (rest unverified) · C = misses one criterion · D = misses more. Within a tier: best fit first, then price. Pages with no verifiable numbers (vendor overview pages, error pages) are filtered out.
 - **Match** — `4✓ 2?` = 4 criteria confirmed met, 2 couldn't be verified from the page; `✗freq` names what failed.
 - **Lead** — `stock` / `orderable` / `~6 wk` come from the product page; `~10 wk (vendor est)` is that vendor's *typical* lead time (an estimate); `custom` = made to order.
 - **Price `RFQ`** — vendor doesn't list prices; email the address in the last column for a quote (mention the part number, quantity, and ask lead time).

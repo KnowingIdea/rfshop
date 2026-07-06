@@ -83,7 +83,9 @@ def _render(url):
     with _pw["lock"]:  # ponytail: serialize renders; parallel contexts if ever the bottleneck
         page = _browser().new_page(user_agent=UA)
         try:
-            page.goto(url, timeout=30000, wait_until="domcontentloaded")
+            resp = page.goto(url, timeout=30000, wait_until="domcontentloaded")
+            if resp and resp.status >= 400:
+                return None  # error/anti-bot page is not content
             page.wait_for_timeout(2500)
             return page.content()
         finally:

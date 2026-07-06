@@ -1,8 +1,9 @@
 """Self-checks: extractor, URL filter, criterion evaluation, tiering, rank order.
 Run: python3 test_rfshop.py  (no network)"""
 from rfshop.adapters import _url_ok
-from rfshop.extract import parse_specs
-from rfshop.rank import evaluate, rank, tier
+from rfshop.extract import ERROR_TITLE, parse_specs
+from rfshop.llm import _json_from
+from rfshop.rank import evaluate, markdown, rank, tier
 
 # --- extractor ---
 DS = ("LNF-LNC4_8C Cryogenic Low Noise Amplifier 4-8 GHz. Gain typically 42 dB. "
@@ -86,6 +87,40 @@ lc = [
 rl = rank(lc, spec_l)
 assert [c["url"] for c in rl] == ["s", "slow"], [c["url"] for c in rl]  # BadCo excluded
 assert rl[0]["preferred"] and "lead" in rl[0]["met"] and rl[1]["miss"] == ["lead"]
+
+# quality gate: overview/summary pages (no numbers, no part number) and wrong-type titles drop
+gate = [
+    {"url": "ov", "title": "Cryogenic Attenuators Overview", "vendor": "V",
+     "specs": {"cryo": True}},                                   # no real numbers -> drop
+    {"url": "iso", "title": "Cryogenic Isolator Series X", "vendor": "V",
+     "specs": {"freq_ghz": [0, 18], "cryo": True}},              # different part -> drop
+    {"url": "list", "title": "SMA Fixed Attenuators", "vendor": "V",
+     "specs": {"freq_ghz": [0, 18], "attenuation_db": 1, "connector": "SMA",
+               "cryo": True, "bulkhead": True, "price_usd": 346}},  # plural listing -> drop
+    {"url": "pn", "title": "QMC-CRYOATT-10BLK", "vendor": "V",
+     "specs": {"cryo": True}},                                   # part number, specs in PDF -> keep
+    {"url": "pnpl", "title": "DC to 18 GHz Attenuators QMC-CRYOATT-20BLK", "vendor": "V",
+     "specs": {"freq_ghz": [0, 18], "cryo": True}},              # plural BUT part number -> keep
+]
+rg = rank(gate, spec)
+assert [c["url"] for c in rg] == ["pnpl", "pn"], [c["url"] for c in rg]
+
+# error-page titles
+assert ERROR_TITLE.search("Just a moment...")
+assert ERROR_TITLE.search("404 Not Found")
+assert ERROR_TITLE.search("Access Denied")
+assert not ERROR_TITLE.search("Attenuator 2082-6242 DC-18 GHz")
+
+# markdown top-N truncation
+md = markdown(r, spec, set(), top=2)
+assert "| 1 |" in md and "| 2 |" in md and "| 3 |" not in md and "1 more" in md
+
+# llm reply parsing (no subprocess)
+assert _json_from('```json\n{"category": "lna", "freq_ghz": [4, 8]}\n```') == {
+    "category": "lna", "freq_ghz": [4, 8]}
+assert _json_from('noise before [{"url": "u", "specs": {"cryo": true}}] after') == [
+    {"url": "u", "specs": {"cryo": True}}]
+assert _json_from("no json here") is None
 
 # other[] keyword scoring
 spec_kw = {"category": "cable", "other": ["becu", "stainless"]}

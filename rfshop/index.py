@@ -30,7 +30,7 @@ def _db():
 
 def _index_page(vendor_name, url):
     text, pdf = extract.page_text(url)
-    if not text:
+    if not text or extract.ERROR_TITLE.search(text.split("\n", 1)[0]):
         return None
     title = text.split("\n", 1)[0][:120].strip() or url.rstrip("/").rsplit("/", 1)[-1]
     specs = extract.parse_specs(text)

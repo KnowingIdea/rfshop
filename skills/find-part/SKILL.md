@@ -29,7 +29,7 @@ Ask about or infer urgency: "need it this month" → `max_lead_weeks`. If the us
 
 4. If flags.json is non-empty (top results with unverified criteria): read it, infer values from each ≤300-char excerpt, write `~/.rfshop/resolutions.json` as `[{"url": "...", "specs": {"freq_ghz": [0,18], "bulkhead": true}}]` — only values you're confident of. Then `python3 -m rfshop rerank ~/.rfshop/resolutions.json`.
 
-5. Present the final tiered table verbatim (user wants MANY options — do not trim tiers). Note vendors that errored and any backstop vendors you couldn't cover. The **Lead** column: `stock`/`orderable` = page-level evidence; `~N wk` = stated lead time; `~N wk (vendor est)` = registry's typical estimate, not part-specific — say so; `custom` = made to order. When lead time matters to the user, flag that RFQ-vendor leads are only confirmed by asking — the RFQ draft already asks.
+5. Present the final tiered table verbatim (stdout already trims to the top 10; state the total count and that the full list is in `~/.rfshop/results.md` — read it only if the user asks for more options). Note vendors that errored and any backstop vendors you couldn't cover. The **Lead** column: `stock`/`orderable` = page-level evidence; `~N wk` = stated lead time; `~N wk (vendor est)` = registry's typical estimate, not part-specific — say so; `custom` = made to order. When lead time matters to the user, flag that RFQ-vendor leads are only confirmed by asking — the RFQ draft already asks.
 
 6. RFQ drafts on request: `python3 -m rfshop contact "<vendor>"` for the address, then write `~/.rfshop/outbox/<vendor>-<part>.txt`:
 ```

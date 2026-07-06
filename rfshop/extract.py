@@ -25,6 +25,8 @@ LEAD_TIME = re.compile(r"lead\s*time[^.\n\r]{0,25}?(\d+)(?:\s*[-–]\s*(\d+))?\s
 LEAD_STOCK = re.compile(r"\bin stock\b|ready to ship|ships (?:today|same day)|available now", re.I)
 LEAD_CART = re.compile(r"add to cart|add to basket|buy now", re.I)
 LEAD_CUSTOM = re.compile(r"made to order|built to order|build to order|custom manufactur", re.I)
+ERROR_TITLE = re.compile(r"page not found|\b404\b|\b403\b|access denied|forbidden"
+                         r"|just a moment|attention required|captcha|error occurred", re.I)
 
 
 def page_text(url):
@@ -118,6 +120,9 @@ def enrich(candidate, spec):
     text, pdf = page_text(candidate["url"])
     if not text:
         candidate["error"] = "unreachable"
+        return candidate
+    if ERROR_TITLE.search(text.split("\n", 1)[0]):
+        candidate["error"] = "error page"
         return candidate
     specs = parse_specs(text)
     need_more = "freq_ghz" not in specs or (

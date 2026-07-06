@@ -1,8 +1,14 @@
 """Per-criterion evaluation (met/miss/unknown), tiering, sort, markdown report.
 Near-misses are kept and down-ranked, never silently dropped."""
+import re
+
+from .adapters import PART_WORDS
 from .registry import synonyms
 
 SYSTEM_WORDS = ("system", "breadboard", "kit", "dewar", "chassis", "rack-mount")
+# part numbers mix letters+digits (LNC4_8SG, 10BLK) or are digit-digit codes (2082-6242)
+PARTNUM = re.compile(r"(?i)\b(?=\w*\d)(?=\w*[a-z])\w{3,}\b|\d{3,}[-_]\d")
+DATA_KEYS = ("freq_ghz", "gain_db", "noise_k", "attenuation_db", "price_usd", "lead_weeks")
 TIERS = {0: "A — meets all stated criteria", 1: "B — meets all checkable criteria (some unverified)",
          2: "C — misses one criterion", 3: "D — misses two or more"}
 
@@ -16,6 +22,31 @@ def _named(c, category):
     name = (c.get("title", "") + " " + c.get("url", "")).lower().replace("_", "-")
     return any(w.replace(" ", "-") in name or w.replace(" ", "") in name
                for w in synonyms(category))
+
+
+def _has_data(c):
+    """Real product pages yield numbers or a part number; overview/summary pages yield neither."""
+    s = c.get("specs", {})
+    return any(k in s for k in DATA_KEYS) or bool(PARTNUM.search(c.get("title", "")))
+
+
+_PLURALS = {p + s for p in PART_WORDS for s in ("s", "es")}
+
+
+def _is_listing(c):
+    """Plural family/category title with no concrete part number = listing page."""
+    if PARTNUM.search(c.get("title", "")):
+        return False
+    return any(w in _PLURALS for w in re.split(r"[^a-z0-9]+", c.get("title", "").lower()))
+
+
+def _wrong_type(c, category):
+    """Title names a different part type and never names ours -> not our part."""
+    if _named(c, category):
+        return False
+    own = {w.rstrip("s") for s in synonyms(category) for w in re.split(r"[\s-]+", s)}
+    words = {w.rstrip("s") for w in re.split(r"[^a-z0-9.]+", c.get("title", "").lower()) if w}
+    return any(w in PART_WORDS and w not in own for w in words)
 
 
 def evaluate(c, spec):
@@ -104,6 +135,8 @@ def rank(cands, spec):
         evaluate(c, spec)
         if not c["met"] and not _named(c, spec["category"]):
             continue  # nothing verifiably relevant
+        if not _has_data(c) or _is_listing(c) or _wrong_type(c, spec["category"]):
+            continue  # overview/listing page or a different part — not a rankable product
         c["tier"] = tier(c)
         c["score"] = desirability(c, spec)
         kept.append(c)
@@ -144,17 +177,20 @@ def _row(i, c):
             f"{', '.join(ks) or '?'} | {price} | {lead_str(c)} | {c['url']} |")
 
 
-def markdown(results, spec, errors):
+def markdown(results, spec, errors, top=None):
     head = f"# Results: {spec.get('category')} " + (
         f"{spec['freq_ghz'][0]:g}–{spec['freq_ghz'][1]:g} GHz" if spec.get("freq_ghz") else "")
+    shown = results[:top] if top else results
     lines, cur = [head], None
-    for i, c in enumerate(results, 1):
+    for i, c in enumerate(shown, 1):
         if c["tier"] != cur:
             cur = c["tier"]
             lines += ["", f"## Tier {TIERS[cur]}", "",
                       "| # | Part | Vendor | Match | Freq (GHz) | Key specs | Price | Lead | Link |",
                       "|---|------|--------|-------|-----------|-----------|-------|------|------|"]
         lines.append(_row(i, c))
+    if top and len(results) > top:
+        lines += ["", f"…{len(results) - top} more lower-ranked options in results.md"]
     if errors:
         lines += ["", "Vendors with errors/no reach: " + ", ".join(sorted(errors))]
     return "\n".join(lines) + "\n"

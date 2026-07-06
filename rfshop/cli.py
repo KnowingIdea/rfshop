@@ -65,9 +65,8 @@ def _write_outputs(results, spec, errors):
         {"spec": spec, "results": [{k: v for k, v in c.items() if k != "kw"}
                                    for c in results]}, indent=1))
     (DATA / "flags.json").write_text(json.dumps(flags, indent=1))
-    md = rank.markdown(results, spec, errors)
-    (DATA / "results.md").write_text(md)
-    print(md)
+    (DATA / "results.md").write_text(rank.markdown(results, spec, errors))
+    print(rank.markdown(results, spec, errors, top=10))  # full list stays in results.md
     print(f"[{len(results)} options | results: {DATA/'results.md'} | "
           f"{len(flags)} unverified -> {DATA/'flags.json'}]")
 

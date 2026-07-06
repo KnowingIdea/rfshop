@@ -19,6 +19,7 @@ JUNK_WORDS = {"about", "contact", "team", "privacy", "careers", "career", "news"
               "policy", "distributors", "query", "quote", "quotes", "login", "cart",
               "account", "terms", "warranty", "faq", "events", "press", "openpositions",
               "sitemap", "home", "search", "history", "library", "publications",
+              "category", "categories",
               "paper", "papers", "article", "articles", "industries", "industry",
               "markets", "market", "applications", "capabilities", "exhibit",
               "conference", "launch", "launches", "partnership", "signs", "study"}
