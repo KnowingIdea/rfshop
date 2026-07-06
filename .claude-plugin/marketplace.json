@@ -1,0 +1,11 @@
+{
+  "name": "rfshop",
+  "owner": { "name": "J. Chung" },
+  "plugins": [
+    {
+      "name": "rfshop",
+      "source": "./",
+      "description": "RF/microwave/cryogenic parts shopper with /find-part natural-language search"
+    }
+  ]
+}

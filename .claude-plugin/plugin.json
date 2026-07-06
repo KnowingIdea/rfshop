@@ -1,0 +1,6 @@
+{
+  "name": "rfshop",
+  "version": "2.0.0",
+  "description": "RF/microwave/cryogenic parts shopper: deep-scrapes ~50 curated vendors, ranks every option by criteria fit then price, drafts RFQ emails.",
+  "skills": "./skills/"
+}

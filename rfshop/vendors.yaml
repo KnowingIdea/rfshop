@@ -1,0 +1,370 @@
+# RF/microwave/cryogenic vendor registry.
+# strategy: sitemap (crawl sitemap.xml, filter product URLs) | search (search_url with {q})
+# render: true -> playwright (JS/Cloudflare). price_listed: prices on site vs RFQ-only.
+# Add vendors freely; unknown fields ignored.
+
+- name: Low Noise Factory
+  url: https://lownoisefactory.com
+  categories: [lna, amplifier, circulator, isolator]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@lownoisefactory.se
+
+- name: Cosmic Microwave Technology
+  url: https://www.cosmicmicrowavetechnology.com
+  categories: [lna, amplifier]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@cosmicmicrowavetechnology.com
+
+- name: Narda-MITEQ
+  url: https://www.nardamiteq.com
+  categories: [lna, amplifier, mixer]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: nardamiteq@l3harris.com
+
+- name: B&Z Technologies
+  url: https://bnztech.com
+  categories: [lna, amplifier]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@bnztech.com
+
+- name: QuinStar Technology
+  url: https://quinstar.com
+  categories: [lna, amplifier, isolator, circulator, switch, attenuator]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@quinstar.com
+
+- name: Wenteq Microwave
+  url: https://www.wenteq.com
+  categories: [lna, amplifier]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@wenteq.com
+
+- name: Ciao Wireless
+  url: https://www.ciaowireless.com
+  categories: [lna, amplifier]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@ciaowireless.com
+
+- name: ERZia
+  url: https://www.erzia.com
+  categories: [lna, amplifier]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@erzia.com
+
+- name: RF-Lambda
+  url: https://rflambda.com
+  categories: [lna, amplifier, attenuator, switch, coupler, filter]
+  strategy: backstop   # no sitemap
+  price_listed: true
+  rfq_email: sales@rflambda.com
+
+- name: Mini-Circuits
+  url: https://www.minicircuits.com
+  categories: [lna, amplifier, attenuator, filter, mixer, coupler, switch, dc_block, bias_tee, termination, cable]
+  strategy: backstop   # robots.txt disallows search
+  price_listed: true
+  rfq_email: sales@minicircuits.com
+
+- name: XMA Corporation
+  url: https://xmacorp.com
+  categories: [attenuator, termination, adapter, dc_block]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@xmacorp.com
+
+- name: Quantum Microwave
+  url: https://quantummicrowave.com
+  categories: [attenuator, termination, circulator, isolator, coupler, filter, adapter, feedthrough, dc_block]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@quantummicrowave.com
+
+- name: JFW Industries
+  url: https://www.jfwindustries.com
+  categories: [attenuator, termination]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@jfwindustries.com
+
+- name: MECA Electronics
+  url: https://www.e-meca.com
+  categories: [attenuator, termination, coupler]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@e-meca.com
+
+- name: API Weinschel
+  url: https://apitech.com
+  categories: [attenuator, termination]
+  strategy: search
+  search_url: https://apitech.com/search/?q={q}
+  price_listed: false
+  rfq_email: sales@apitech.com
+
+- name: DiTom Microwave
+  url: https://www.ditom.com
+  categories: [circulator, isolator]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@ditom.com
+
+- name: Nova Microwave
+  url: https://www.novamicro.com
+  categories: [circulator, isolator]
+  strategy: backstop   # dead TLS+404
+  price_listed: false
+  rfq_email: sales@novamicro.com
+
+- name: Raditek
+  url: https://www.raditek.com
+  categories: [circulator, isolator, lna, amplifier]
+  strategy: search
+  search_url: https://www.raditek.com/?s={q}
+  price_listed: false
+  rfq_email: sales@raditek.com
+
+- name: Micro Harmonics
+  url: https://www.microharmonics.com
+  categories: [isolator, circulator]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@microharmonics.com
+
+- name: CryoCoax (Intelliconnect)
+  url: https://cryocoax.com
+  categories: [cable, connector, feedthrough]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@cryocoax.com
+
+- name: COAX Co Japan
+  url: http://www.coax.co.jp/en
+  categories: [cable]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@coax.co.jp
+
+- name: Delft Circuits
+  url: https://delft-circuits.com
+  categories: [cable, feedthrough, filter]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@delft-circuits.com
+
+- name: Junkosha
+  url: https://www.junkosha.com
+  categories: [cable]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@junkosha.co.jp
+
+- name: Times Microwave
+  url: https://timesmicrowave.com
+  categories: [cable, connector]
+  strategy: backstop   # hard Cloudflare
+  price_listed: false
+  rfq_email: sales@timesmicrowave.com
+
+- name: Maury Microwave
+  url: https://maurymw.com
+  categories: [cable, connector, adapter]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@maurymw.com
+
+- name: Southwest Microwave
+  url: https://mpd.southwestmicrowave.com
+  categories: [connector, adapter, feedthrough]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: mpd@southwestmicrowave.com
+
+- name: SV Microwave
+  url: https://www.svmicrowave.com
+  categories: [connector, adapter, cable, feedthrough]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@svmicro.com
+
+- name: Solid Sealing Technology
+  url: https://solidsealing.com
+  categories: [feedthrough, connector]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@solidsealing.com
+
+- name: Accu-Glass Products
+  url: https://accuglassproducts.com
+  categories: [feedthrough, connector, cable]
+  strategy: search
+  search_url: https://accuglassproducts.com/search?q={q}
+  price_listed: true
+  rfq_email: sales@accuglassproducts.com
+
+- name: Kurt J. Lesker
+  url: https://www.lesker.com
+  categories: [feedthrough, connector]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@lesker.com
+
+- name: Allectra
+  url: https://allectra.com
+  categories: [feedthrough, connector, cable]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@allectra.com
+
+- name: Marki Microwave
+  url: https://markimicrowave.com
+  categories: [mixer, filter, coupler, amplifier, dc_block, bias_tee]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@markimicrowave.com
+
+- name: K&L Microwave
+  url: https://klfilterwizard.com
+  categories: [filter]
+  strategy: backstop   # no sitemap/search
+  price_listed: false
+  rfq_email: sales@klmicrowave.com
+
+- name: RLC Electronics
+  url: https://rlcelectronics.com
+  categories: [filter, attenuator, switch, dc_block, termination]
+  strategy: backstop   # no sitemap
+  price_listed: false
+  rfq_email: sales@rlcelectronics.com
+
+- name: Wainwright Instruments
+  url: https://www.wainwright-filters.com
+  categories: [filter]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@wainwright-filters.de
+
+- name: Krytar
+  url: https://krytar.com
+  categories: [coupler, detector, termination, adapter]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@krytar.com
+
+- name: Pasternack
+  url: https://www.pasternack.com
+  categories: [attenuator, adapter, cable, connector, termination, amplifier, coupler, filter, dc_block, bias_tee]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@pasternack.com
+
+- name: Fairview Microwave
+  url: https://www.fairviewmicrowave.com
+  categories: [attenuator, adapter, cable, connector, termination, amplifier, coupler, filter, dc_block, bias_tee]
+  strategy: search
+  search_url: https://www.fairviewmicrowave.com/searchresults.aspx?txtSearch={q}
+  render: true
+  price_listed: true
+  rfq_email: sales@fairviewmicrowave.com
+
+- name: Eravant
+  url: https://www.eravant.com
+  categories: [amplifier, mixer, coupler, filter, isolator, termination, adapter]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: sales@eravant.com
+
+- name: Bluefors
+  url: https://bluefors.com
+  categories: [cable, feedthrough, filter, attenuator]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@bluefors.com
+
+- name: RFMW
+  url: https://www.rfmw.com
+  categories: [lna, amplifier, attenuator, filter, mixer, coupler, switch, termination, dc_block, bias_tee]
+  strategy: sitemap
+  price_listed: true
+  rfq_email: info@rfmw.com
+
+- name: Digi-Key
+  url: https://www.digikey.com
+  categories: [attenuator, amplifier, filter, mixer, switch, cable, connector, adapter, termination]
+  strategy: backstop   # bot wall
+  price_listed: true
+  rfq_email: null
+
+# --- limited/broken direct scrape; found via skill WebSearch backstop ---
+# (K&L klfilterwizard, Nova Microwave, RLC Electronics, Times Microwave, RF-Lambda,
+#  Mini-Circuits full parametric, Digi-Key/Mouser bot-walls)
+
+- name: EZ Form Cable
+  url: https://www.ezform.com
+  categories: [cable, connector]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: sales@ezform.com
+
+- name: KEYCOM
+  url: https://www.keycom.co.jp/eproducts/upj/top.htm
+  categories: [cable, connector]
+  strategy: backstop   # broken TLS
+  price_listed: false
+  rfq_email: info@keycom.co.jp
+
+- name: Carlisle IT (Micro-Coax)
+  url: https://www.carlisleit.com
+  categories: [cable, connector]
+  strategy: backstop   # connection refused
+  price_listed: false
+  rfq_email: cit-info@carlisleit.com
+
+- name: Rosenberger
+  url: https://www.rosenberger.com
+  categories: [connector, adapter, cable]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@rosenberger.com
+
+- name: Radiall
+  url: https://www.radiall.com
+  categories: [connector, adapter, switch, cable]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@radiall.com
+
+- name: Amphenol RF
+  url: https://www.amphenolrf.com
+  categories: [connector, adapter, cable]
+  strategy: backstop   # Akamai 403
+  price_listed: true
+  rfq_email: info@amphenolrf.com
+
+- name: HUBER+SUHNER
+  url: https://www.hubersuhner.com
+  categories: [cable, connector, adapter, attenuator]
+  strategy: sitemap
+  price_listed: false
+  rfq_email: info@hubersuhner.com
+
+- name: Anritsu
+  url: https://www.anritsu.com
+  categories: [termination, adapter, connector]
+  strategy: backstop   # dead sitemap host
+  price_listed: false
+  rfq_email: null
+
+- name: Mouser
+  url: https://www.mouser.com
+  categories: [attenuator, amplifier, filter, mixer, switch, cable, connector, adapter, termination]
+  strategy: backstop   # bot wall
+  price_listed: true
+  rfq_email: null

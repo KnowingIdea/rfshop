@@ -1,0 +1,9 @@
+cache.db
+index.db
+results.*
+flags.json
+spec*.json
+outbox/
+index_progress.log
+__pycache__/
+*.egg-info/

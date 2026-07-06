@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rfshop"
+version = "2.0.0"
+description = "RF/microwave/cryogenic parts shopper: scrape a curated vendor registry, rank every option by criteria fit then price, draft RFQ emails."
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "PyYAML>=6.0",
+    "pdfplumber>=0.10",
+    "playwright>=1.40",
+]
+
+[project.scripts]
+rfshop = "rfshop.cli:main"
+
+[tool.setuptools]
+packages = ["rfshop"]
+
+[tool.setuptools.package-data]
+rfshop = ["vendors.yaml"]

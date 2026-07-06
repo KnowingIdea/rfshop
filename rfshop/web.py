@@ -1,0 +1,138 @@
+"""Local web UI: spec form -> tiered results table. stdlib only, no LLM required.
+python -m rfshop web [--port 8760]"""
+import html
+import json
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+from . import rank
+from .cli import search as cli_search
+from .registry import CATEGORY_SYNONYMS, DATA, load_vendors
+
+_search_lock = threading.Lock()  # one search at a time; playwright + politeness
+
+PAGE = """<!doctype html><meta charset="utf-8">
+<title>rfshop</title>
+<style>
+ body{font:15px/1.5 -apple-system,system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#1a1a2e}
+ h1{font-size:1.4rem} form{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;align-items:end;
+   background:#f6f7fb;padding:1rem;border-radius:10px}
+ label{font-size:.78rem;color:#555;display:block} input,select{width:100%;padding:.45rem;border:1px solid #ccd;
+   border-radius:6px;font-size:.9rem;box-sizing:border-box}
+ button{grid-column:span 4;padding:.6rem;background:#4a4adf;color:#fff;border:0;border-radius:8px;
+   font-size:1rem;cursor:pointer} button:disabled{opacity:.5}
+ table{border-collapse:collapse;width:100%;margin-top:1rem;font-size:.85rem}
+ th,td{border-bottom:1px solid #eee;padding:.45rem .5rem;text-align:left;vertical-align:top}
+ th{background:#f6f7fb} h2{font-size:1rem;margin:1.4rem 0 .2rem}
+ .miss{color:#c0392b}.rfq{color:#888} a{color:#4a4adf} #status{margin:1rem 0;color:#555}
+ .wrap{overflow-x:auto}
+</style>
+<h1>rfshop — RF/microwave/cryogenic parts search</h1>
+<form id="f">
+ <div><label>Category</label><select name="category">CATEGORY_OPTIONS</select></div>
+ <div><label>Freq low (GHz)</label><input name="flo" type="number" step="any" placeholder="4"></div>
+ <div><label>Freq high (GHz)</label><input name="fhi" type="number" step="any" placeholder="8"></div>
+ <div><label>Operating temp (K)</label><input name="temp" type="number" step="any" placeholder="4"></div>
+ <div><label>Min gain (dB)</label><input name="gain" type="number" step="any"></div>
+ <div><label>Max noise temp (K)</label><input name="noise" type="number" step="any"></div>
+ <div><label>Attenuation (dB)</label><input name="atten" type="number" step="any"></div>
+ <div><label>Connector</label><input name="conn" placeholder="SMA"></div>
+ <div><label>Mount</label><select name="mount"><option value="">any</option><option>bulkhead</option></select></div>
+ <div style="grid-column:span 3"><label>Other keywords (comma-sep)</label>
+   <input name="other" placeholder="BeCu, stainless, non-magnetic"></div>
+ <button>Search (first run per category crawls vendors — minutes)</button>
+</form>
+<div id="status"></div><div id="out" class="wrap"></div>
+<script>
+const f=document.getElementById('f'),st=document.getElementById('status'),out=document.getElementById('out');
+f.onsubmit=async e=>{e.preventDefault();
+ const d=Object.fromEntries(new FormData(f)); f.querySelector('button').disabled=true;
+ st.textContent='Searching… (deep-crawling uncached vendors can take several minutes)';out.innerHTML='';
+ try{const r=await fetch('/search',{method:'POST',body:JSON.stringify(d)});
+   const j=await r.json(); st.textContent=j.n+' options — ranked by criteria fit, then price';
+   out.innerHTML=j.html;}
+ catch(err){st.textContent='Error: '+err;}
+ f.querySelector('button').disabled=false;};
+</script>"""
+
+
+def _spec_from_form(d):
+    spec = {"category": d["category"], "other": []}
+    if d.get("flo") and d.get("fhi"):
+        spec["freq_ghz"] = [float(d["flo"]), float(d["fhi"])]
+    for k, key in [("temp", "temp_k"), ("gain", "gain_db_min"),
+                   ("noise", "noise_temp_k_max"), ("atten", "attenuation_db")]:
+        if d.get(k):
+            spec[key] = float(d[k])
+    if d.get("conn"):
+        spec["connector"] = d["conn"]
+    if d.get("mount"):
+        spec["mount"] = d["mount"]
+    if d.get("other"):
+        spec["other"] = [w.strip() for w in d["other"].split(",") if w.strip()]
+    return spec
+
+
+def _html_results():
+    data = json.loads((DATA / "results.json").read_text())
+    rfq = {v["name"]: v.get("rfq_email") for v in load_vendors()}
+    out, cur = [], None
+    for c in data["results"]:
+        if c["tier"] != cur:
+            cur = c["tier"]
+            out.append(f"</table><h2>Tier {html.escape(rank.TIERS[cur])}</h2>"
+                       "<table><tr><th>Part</th><th>Vendor</th><th>Match</th><th>Freq (GHz)</th>"
+                       "<th>Specs</th><th>Price</th><th>RFQ</th></tr>")
+        s = c.get("specs", {})
+        f = f"{s['freq_ghz'][0]:g}–{s['freq_ghz'][1]:g}" if s.get("freq_ghz") else "?"
+        ks = ", ".join(filter(None, [
+            f"{s['gain_db']:g} dB gain" if s.get("gain_db") else "",
+            f"{s['noise_k']:g} K noise" if s.get("noise_k") else "",
+            f"{s['attenuation_db']:g} dB atten" if s.get("attenuation_db") else "",
+            s.get("connector") or "", "cryo" if s.get("cryo") else "",
+            "bulkhead" if s.get("bulkhead") else ""]))
+        match = f"{len(c['met'])}✓ {len(c['unknown'])}?"
+        if c["miss"]:
+            match += f" <span class=miss>✗{html.escape(','.join(c['miss']))}</span>"
+        price = f"${s['price_usd']:,.0f}" if s.get("price_usd") else "<span class=rfq>RFQ</span>"
+        mail = rfq.get(c["vendor"]) or ""
+        out.append(f"<tr><td><a href='{html.escape(c['url'])}' target=_blank>"
+                   f"{html.escape(c['title'][:70])}</a></td><td>{html.escape(c['vendor'])}</td>"
+                   f"<td>{match}</td><td>{f}</td><td>{html.escape(ks) or '?'}</td><td>{price}</td>"
+                   f"<td>{html.escape(mail)}</td></tr>")
+    out.append("</table>")
+    return "".join(out), len(data["results"])
+
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, *a):
+        pass
+
+    def _send(self, body, ctype="text/html"):
+        self.send_response(200)
+        self.send_header("Content-Type", ctype + "; charset=utf-8")
+        self.end_headers()
+        self.wfile.write(body.encode())
+
+    def do_GET(self):
+        cats = "".join(f"<option>{c}</option>" for c in CATEGORY_SYNONYMS)
+        self._send(PAGE.replace("CATEGORY_OPTIONS", cats))
+
+    def do_POST(self):
+        d = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+        spec = _spec_from_form(d)
+        sp = DATA / "web_spec.json"
+        sp.write_text(json.dumps(spec))
+        with _search_lock:
+            try:
+                cli_search(str(sp))
+            except SystemExit as e:
+                self._send(json.dumps({"n": 0, "html": html.escape(str(e))}), "application/json")
+                return
+        tbl, n = _html_results()
+        self._send(json.dumps({"n": n, "html": tbl}), "application/json")
+
+
+def serve(port=8760):
+    print(f"rfshop web UI: http://localhost:{port}")
+    ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
