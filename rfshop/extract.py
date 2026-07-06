@@ -21,6 +21,10 @@ PRICE = re.compile(r"[$]\s?([\d,]{1,9}(?:\.\d{2})?)")
 CRYO = re.compile(r"cryogenic|cryo\b|\b4\s?K\b|milli-?kelvin|\bmK\b|kelvin", re.I)
 CONNECTOR = re.compile(r"\b(SMA|2\.92\s?mm|2\.4\s?mm|1\.85\s?mm|K\s?connector|N[- ]type|SMP|GPO|G3PO|SMPM)\b", re.I)
 BULKHEAD = re.compile(r"bulkhead|feed-?through|hermetic", re.I)
+LEAD_TIME = re.compile(r"lead\s*time[^.\n\r]{0,25}?(\d+)(?:\s*[-–]\s*(\d+))?\s*(day|week|month)", re.I)
+LEAD_STOCK = re.compile(r"\bin stock\b|ready to ship|ships (?:today|same day)|available now", re.I)
+LEAD_CART = re.compile(r"add to cart|add to basket|buy now", re.I)
+LEAD_CUSTOM = re.compile(r"made to order|built to order|build to order|custom manufactur", re.I)
 
 
 def page_text(url):
@@ -79,6 +83,19 @@ def parse_specs(text):
         s["connector"] = m.group(1).upper().replace(" ", "")
     s["cryo"] = bool(CRYO.search(text))
     s["bulkhead"] = bool(BULKHEAD.search(text))
+    # lead time: explicit statement > in-stock wording > purchasable-online > custom flag
+    if m := LEAD_TIME.search(text):
+        lo = float(m.group(1))
+        hi = float(m.group(2)) if m.group(2) else lo
+        unit = {"day": 1 / 7, "week": 1, "month": 4.3}[m.group(3).lower()]
+        s["lead_weeks"] = round((lo + hi) / 2 * unit, 1)
+        s["lead_note"] = m.group(0)[:40]
+    elif LEAD_STOCK.search(text):
+        s["lead_weeks"], s["lead_note"] = 0.0, "in stock"
+    elif LEAD_CART.search(text):
+        s["lead_weeks"], s["lead_note"] = 0.5, "purchasable online"
+    elif LEAD_CUSTOM.search(text):
+        s["lead_note"] = "custom / made to order"
     # attenuation: only trust "X dB" values in attenuator context near the word
     att = re.search(r"atten\w*[^.\n\r]{0,30}?(\d{1,2}(?:\.\d+)?)\s*dB", text, re.I)
     if att:

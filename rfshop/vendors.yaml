@@ -7,6 +7,7 @@
   url: https://lownoisefactory.com
   categories: [lna, amplifier, circulator, isolator]
   strategy: sitemap
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: sales@lownoisefactory.se
 
@@ -14,6 +15,7 @@
   url: https://www.cosmicmicrowavetechnology.com
   categories: [lna, amplifier]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: info@cosmicmicrowavetechnology.com
 
@@ -21,6 +23,7 @@
   url: https://www.nardamiteq.com
   categories: [lna, amplifier, mixer]
   strategy: sitemap
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: nardamiteq@l3harris.com
 
@@ -28,6 +31,7 @@
   url: https://bnztech.com
   categories: [lna, amplifier]
   strategy: sitemap
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: sales@bnztech.com
 
@@ -35,6 +39,7 @@
   url: https://quinstar.com
   categories: [lna, amplifier, isolator, circulator, switch, attenuator]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@quinstar.com
 
@@ -42,6 +47,7 @@
   url: https://www.wenteq.com
   categories: [lna, amplifier]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@wenteq.com
 
@@ -49,6 +55,7 @@
   url: https://www.ciaowireless.com
   categories: [lna, amplifier]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@ciaowireless.com
 
@@ -56,6 +63,7 @@
   url: https://www.erzia.com
   categories: [lna, amplifier]
   strategy: sitemap
+  lead_weeks: 12   # typical, estimate
   price_listed: false
   rfq_email: sales@erzia.com
 
@@ -63,6 +71,7 @@
   url: https://rflambda.com
   categories: [lna, amplifier, attenuator, switch, coupler, filter]
   strategy: backstop   # no sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: sales@rflambda.com
 
@@ -70,6 +79,7 @@
   url: https://www.minicircuits.com
   categories: [lna, amplifier, attenuator, filter, mixer, coupler, switch, dc_block, bias_tee, termination, cable]
   strategy: backstop   # robots.txt disallows search
+  lead_weeks: 2   # typical, estimate
   price_listed: true
   rfq_email: sales@minicircuits.com
 
@@ -77,6 +87,7 @@
   url: https://xmacorp.com
   categories: [attenuator, termination, adapter, dc_block]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@xmacorp.com
 
@@ -84,6 +95,7 @@
   url: https://quantummicrowave.com
   categories: [attenuator, termination, circulator, isolator, coupler, filter, adapter, feedthrough, dc_block]
   strategy: sitemap
+  lead_weeks: 1   # typical, estimate
   price_listed: true
   rfq_email: sales@quantummicrowave.com
 
@@ -91,6 +103,7 @@
   url: https://www.jfwindustries.com
   categories: [attenuator, termination]
   strategy: sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: sales@jfwindustries.com
 
@@ -98,6 +111,7 @@
   url: https://www.e-meca.com
   categories: [attenuator, termination, coupler]
   strategy: sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: sales@e-meca.com
 
@@ -106,6 +120,7 @@
   categories: [attenuator, termination]
   strategy: search
   search_url: https://apitech.com/search/?q={q}
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@apitech.com
 
@@ -113,6 +128,7 @@
   url: https://www.ditom.com
   categories: [circulator, isolator]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@ditom.com
 
@@ -120,6 +136,7 @@
   url: https://www.novamicro.com
   categories: [circulator, isolator]
   strategy: backstop   # dead TLS+404
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@novamicro.com
 
@@ -128,6 +145,7 @@
   categories: [circulator, isolator, lna, amplifier]
   strategy: search
   search_url: https://www.raditek.com/?s={q}
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@raditek.com
 
@@ -135,6 +153,7 @@
   url: https://www.microharmonics.com
   categories: [isolator, circulator]
   strategy: sitemap
+  lead_weeks: 2   # typical, estimate
   price_listed: true
   rfq_email: sales@microharmonics.com
 
@@ -142,6 +161,7 @@
   url: https://cryocoax.com
   categories: [cable, connector, feedthrough]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: info@cryocoax.com
 
@@ -149,6 +169,7 @@
   url: http://www.coax.co.jp/en
   categories: [cable]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@coax.co.jp
 
@@ -156,6 +177,7 @@
   url: https://delft-circuits.com
   categories: [cable, feedthrough, filter]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@delft-circuits.com
 
@@ -163,6 +185,7 @@
   url: https://www.junkosha.com
   categories: [cable]
   strategy: sitemap
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: info@junkosha.co.jp
 
@@ -170,6 +193,7 @@
   url: https://timesmicrowave.com
   categories: [cable, connector]
   strategy: backstop   # hard Cloudflare
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@timesmicrowave.com
 
@@ -177,6 +201,7 @@
   url: https://maurymw.com
   categories: [cable, connector, adapter]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@maurymw.com
 
@@ -184,6 +209,7 @@
   url: https://mpd.southwestmicrowave.com
   categories: [connector, adapter, feedthrough]
   strategy: sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: mpd@southwestmicrowave.com
 
@@ -191,6 +217,7 @@
   url: https://www.svmicrowave.com
   categories: [connector, adapter, cable, feedthrough]
   strategy: sitemap
+  lead_weeks: 2   # typical, estimate
   price_listed: true
   rfq_email: sales@svmicro.com
 
@@ -198,6 +225,7 @@
   url: https://solidsealing.com
   categories: [feedthrough, connector]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@solidsealing.com
 
@@ -206,6 +234,7 @@
   categories: [feedthrough, connector, cable]
   strategy: search
   search_url: https://accuglassproducts.com/search?q={q}
+  lead_weeks: 1   # typical, estimate
   price_listed: true
   rfq_email: sales@accuglassproducts.com
 
@@ -213,6 +242,7 @@
   url: https://www.lesker.com
   categories: [feedthrough, connector]
   strategy: sitemap
+  lead_weeks: 2   # typical, estimate
   price_listed: true
   rfq_email: sales@lesker.com
 
@@ -220,6 +250,7 @@
   url: https://allectra.com
   categories: [feedthrough, connector, cable]
   strategy: sitemap
+  lead_weeks: 3   # typical, estimate
   price_listed: true
   rfq_email: sales@allectra.com
 
@@ -227,6 +258,7 @@
   url: https://markimicrowave.com
   categories: [mixer, filter, coupler, amplifier, dc_block, bias_tee]
   strategy: sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: sales@markimicrowave.com
 
@@ -234,6 +266,7 @@
   url: https://klfilterwizard.com
   categories: [filter]
   strategy: backstop   # no sitemap/search
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: sales@klmicrowave.com
 
@@ -241,6 +274,7 @@
   url: https://rlcelectronics.com
   categories: [filter, attenuator, switch, dc_block, termination]
   strategy: backstop   # no sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: sales@rlcelectronics.com
 
@@ -248,6 +282,7 @@
   url: https://www.wainwright-filters.com
   categories: [filter]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@wainwright-filters.de
 
@@ -255,6 +290,7 @@
   url: https://krytar.com
   categories: [coupler, detector, termination, adapter]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@krytar.com
 
@@ -262,6 +298,7 @@
   url: https://www.pasternack.com
   categories: [attenuator, adapter, cable, connector, termination, amplifier, coupler, filter, dc_block, bias_tee]
   strategy: sitemap
+  lead_weeks: 0   # typical, estimate
   price_listed: true
   rfq_email: sales@pasternack.com
 
@@ -271,6 +308,7 @@
   strategy: search
   search_url: https://www.fairviewmicrowave.com/searchresults.aspx?txtSearch={q}
   render: true
+  lead_weeks: 0   # typical, estimate
   price_listed: true
   rfq_email: sales@fairviewmicrowave.com
 
@@ -278,6 +316,7 @@
   url: https://www.eravant.com
   categories: [amplifier, mixer, coupler, filter, isolator, termination, adapter]
   strategy: sitemap
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: sales@eravant.com
 
@@ -285,6 +324,7 @@
   url: https://bluefors.com
   categories: [cable, feedthrough, filter, attenuator]
   strategy: sitemap
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: sales@bluefors.com
 
@@ -292,6 +332,7 @@
   url: https://www.rfmw.com
   categories: [lna, amplifier, attenuator, filter, mixer, coupler, switch, termination, dc_block, bias_tee]
   strategy: sitemap
+  lead_weeks: 2   # typical, estimate
   price_listed: true
   rfq_email: info@rfmw.com
 
@@ -299,6 +340,7 @@
   url: https://www.digikey.com
   categories: [attenuator, amplifier, filter, mixer, switch, cable, connector, adapter, termination]
   strategy: backstop   # bot wall
+  lead_weeks: 0   # typical, estimate
   price_listed: true
   rfq_email: null
 
@@ -310,6 +352,7 @@
   url: https://www.ezform.com
   categories: [cable, connector]
   strategy: sitemap
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: sales@ezform.com
 
@@ -317,6 +360,7 @@
   url: https://www.keycom.co.jp/eproducts/upj/top.htm
   categories: [cable, connector]
   strategy: backstop   # broken TLS
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@keycom.co.jp
 
@@ -324,6 +368,7 @@
   url: https://www.carlisleit.com
   categories: [cable, connector]
   strategy: backstop   # connection refused
+  lead_weeks: 10   # typical, estimate
   price_listed: false
   rfq_email: cit-info@carlisleit.com
 
@@ -331,6 +376,7 @@
   url: https://www.rosenberger.com
   categories: [connector, adapter, cable]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@rosenberger.com
 
@@ -338,6 +384,7 @@
   url: https://www.radiall.com
   categories: [connector, adapter, switch, cable]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@radiall.com
 
@@ -345,6 +392,7 @@
   url: https://www.amphenolrf.com
   categories: [connector, adapter, cable]
   strategy: backstop   # Akamai 403
+  lead_weeks: 4   # typical, estimate
   price_listed: true
   rfq_email: info@amphenolrf.com
 
@@ -352,6 +400,7 @@
   url: https://www.hubersuhner.com
   categories: [cable, connector, adapter, attenuator]
   strategy: sitemap
+  lead_weeks: 8   # typical, estimate
   price_listed: false
   rfq_email: info@hubersuhner.com
 
@@ -359,6 +408,7 @@
   url: https://www.anritsu.com
   categories: [termination, adapter, connector]
   strategy: backstop   # dead sitemap host
+  lead_weeks: 6   # typical, estimate
   price_listed: false
   rfq_email: null
 
@@ -366,5 +416,6 @@
   url: https://www.mouser.com
   categories: [attenuator, amplifier, filter, mixer, switch, cable, connector, adapter, termination]
   strategy: backstop   # bot wall
+  lead_weeks: 0   # typical, estimate
   price_listed: true
   rfq_email: null

@@ -63,6 +63,30 @@ r = rank(cands, spec)
 assert [c["url"] for c in r] == ["a", "b", "n"], [c["url"] for c in r]
 assert r[2]["miss"] == ["freq(partial)"]  # near-miss kept, down-ranked
 
+# lead time extraction
+assert parse_specs("Lead time: 6-8 weeks ARO")["lead_weeks"] == 7.0
+assert parse_specs("In Stock — ships today")["lead_weeks"] == 0.0
+assert parse_specs("Add to cart $375")["lead_weeks"] == 0.5
+assert parse_specs("This item is made to order")["lead_note"].startswith("custom")
+assert "lead_weeks" not in parse_specs("This item is made to order")
+
+# lead criterion + vendor prefer/exclude
+spec_l = dict(spec, max_lead_weeks=4, prefer_vendors=["GoodCo"], exclude_vendors=["BadCo"])
+lc = [
+    {"url": "s", "title": "cryo attenuator", "vendor": "GoodCo",
+     "specs": {"freq_ghz": [0, 18], "cryo": True, "attenuation_db": 1, "connector": "SMA",
+               "bulkhead": True, "lead_weeks": 0.0}},
+    {"url": "slow", "title": "cryo attenuator", "vendor": "SlowCo",
+     "specs": {"freq_ghz": [0, 18], "cryo": True, "attenuation_db": 1, "connector": "SMA",
+               "bulkhead": True, "lead_weeks": 12.0}},
+    {"url": "bad", "title": "cryo attenuator", "vendor": "BadCo",
+     "specs": {"freq_ghz": [0, 18], "cryo": True, "attenuation_db": 1, "connector": "SMA",
+               "bulkhead": True, "lead_weeks": 0.0}},
+]
+rl = rank(lc, spec_l)
+assert [c["url"] for c in rl] == ["s", "slow"], [c["url"] for c in rl]  # BadCo excluded
+assert rl[0]["preferred"] and "lead" in rl[0]["met"] and rl[1]["miss"] == ["lead"]
+
 # other[] keyword scoring
 spec_kw = {"category": "cable", "other": ["becu", "stainless"]}
 kwc = evaluate({"title": "SS coax", "url": "u", "specs": {},

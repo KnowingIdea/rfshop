@@ -38,6 +38,9 @@ PAGE = """<!doctype html><meta charset="utf-8">
  <div><label>Attenuation (dB)</label><input name="atten" type="number" step="any"></div>
  <div><label>Connector</label><input name="conn" placeholder="SMA"></div>
  <div><label>Mount</label><select name="mount"><option value="">any</option><option>bulkhead</option></select></div>
+ <div><label>Max lead time (weeks)</label><input name="lead" type="number" step="any" placeholder="any"></div>
+ <div><label>Prefer vendors (comma-sep)</label><input name="prefer" placeholder="XMA, Quantum Microwave"></div>
+ <div><label>Exclude vendors</label><input name="exclude" placeholder=""></div>
  <div style="grid-column:span 3"><label>Other keywords (comma-sep)</label>
    <input name="other" placeholder="BeCu, stainless, non-magnetic"></div>
  <button>Search (first run per category crawls vendors — minutes)</button>
@@ -68,8 +71,12 @@ def _spec_from_form(d):
         spec["connector"] = d["conn"]
     if d.get("mount"):
         spec["mount"] = d["mount"]
-    if d.get("other"):
-        spec["other"] = [w.strip() for w in d["other"].split(",") if w.strip()]
+    if d.get("lead"):
+        spec["max_lead_weeks"] = float(d["lead"])
+    for k, key in [("prefer", "prefer_vendors"), ("exclude", "exclude_vendors"),
+                   ("other", "other")]:
+        if d.get(k):
+            spec[key] = [w.strip() for w in d[k].split(",") if w.strip()]
     return spec
 
 
@@ -82,7 +89,7 @@ def _html_results():
             cur = c["tier"]
             out.append(f"</table><h2>Tier {html.escape(rank.TIERS[cur])}</h2>"
                        "<table><tr><th>Part</th><th>Vendor</th><th>Match</th><th>Freq (GHz)</th>"
-                       "<th>Specs</th><th>Price</th><th>RFQ</th></tr>")
+                       "<th>Specs</th><th>Price</th><th>Lead</th><th>RFQ</th></tr>")
         s = c.get("specs", {})
         f = f"{s['freq_ghz'][0]:g}–{s['freq_ghz'][1]:g}" if s.get("freq_ghz") else "?"
         ks = ", ".join(filter(None, [
@@ -96,10 +103,11 @@ def _html_results():
             match += f" <span class=miss>✗{html.escape(','.join(c['miss']))}</span>"
         price = f"${s['price_usd']:,.0f}" if s.get("price_usd") else "<span class=rfq>RFQ</span>"
         mail = rfq.get(c["vendor"]) or ""
-        out.append(f"<tr><td><a href='{html.escape(c['url'])}' target=_blank>"
+        star = "★ " if c.get("preferred") else ""
+        out.append(f"<tr><td>{star}<a href='{html.escape(c['url'])}' target=_blank>"
                    f"{html.escape(c['title'][:70])}</a></td><td>{html.escape(c['vendor'])}</td>"
                    f"<td>{match}</td><td>{f}</td><td>{html.escape(ks) or '?'}</td><td>{price}</td>"
-                   f"<td>{html.escape(mail)}</td></tr>")
+                   f"<td>{html.escape(rank.lead_str(c))}</td><td>{html.escape(mail)}</td></tr>")
     out.append("</table>")
     return "".join(out), len(data["results"])
 

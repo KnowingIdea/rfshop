@@ -7,9 +7,12 @@ Built for dilution-refrigerator / quantum-measurement shopping: cryogenic LNAs, 
 ## Install
 
 ```bash
+git clone https://github.com/<you>/rfshop && cd rfshop
 pip install -e .
-python -m playwright install chromium   # for JS-heavy / anti-bot vendor sites
+rfshop setup        # installs the playwright browser + checks vendor registry health
 ```
+
+Requires Python ≥3.10. That's it — `rfshop web` for the UI, or install the Claude Code plugin below.
 
 ## Use as a Claude Code plugin (natural-language queries)
 
@@ -35,7 +38,9 @@ Results land in `~/.rfshop/results.md` (tiered markdown table).
 
 ## How it ranks
 
-Each stated criterion is judged per part: **met / missed / unverified** (a page that doesn't mention cryo rating is *unverified*, not failed). Tiers: **A** all met · **B** all checkable met · **C** one miss · **D** more. Within a tier: match fraction → band coverage/noise/etc. → price ascending. `RFQ` = quote-only vendor.
+Each stated criterion is judged per part: **met / missed / unverified** (a page that doesn't mention cryo rating is *unverified*, not failed). Tiers: **A** all met · **B** all checkable met · **C** one miss · **D** more. Within a tier: match fraction → band coverage/noise/lead time → price ascending. `RFQ` = quote-only vendor. `★` = your preferred vendor.
+
+**Lead time** is a first-class factor: pages are scanned for "in stock" / "ships in N weeks" / "made to order"; when a part page is silent, the registry's per-vendor typical lead is shown as `~N wk (vendor est)`. Constrain with `"max_lead_weeks": 4`; prefer or exclude vendors with `"prefer_vendors": ["XMA"]` / `"exclude_vendors": [...]` (both also in the web UI form). Vendor estimates are estimates — the generated RFQ emails always ask for the real number.
 
 ## Vendor registry
 

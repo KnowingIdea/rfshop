@@ -16,13 +16,17 @@ FLAG_TOP = 30
 def _indexed_candidates(vendor, spec):
     if index.build(vendor) == -2:  # catalog too big: slug-filter sitemap instead
         return _searched_candidates(vendor, spec)
-    return index.query(vendor, spec)
+    cands = index.query(vendor, spec)
+    for c in cands:
+        c["vendor_lead"] = vendor.get("lead_weeks")
+    return cands
 
 
 def _searched_candidates(vendor, spec):
     cands = adapters.candidates(vendor, spec)[:SEARCH_CAP]
     for c in cands:
         c["vendor"] = vendor["name"]
+        c["vendor_lead"] = vendor.get("lead_weeks")
         extract.enrich(c, spec)
     return cands
 
@@ -155,6 +159,16 @@ def doctor():
             print(f"{name:28} {status}")
 
 
+def setup():
+    """One-shot post-install: browser + registry health."""
+    import subprocess
+    print("installing chromium for playwright (skips if present)...")
+    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
+    print("\nvendor registry health:")
+    doctor()
+    print(f"\nready. data dir: {DATA}\n  rfshop search spec.json | rfshop web")
+
+
 def contact(vendor_name):
     for v in load_vendors():
         if vendor_name.lower() in v["name"].lower():
@@ -173,6 +187,7 @@ def main():
     ip = sub.add_parser("index")
     ip.add_argument("--rebuild", nargs="?", const="", default=None)
     sub.add_parser("doctor")
+    sub.add_parser("setup")
     sub.add_parser("contact").add_argument("vendor")
     wp = sub.add_parser("web")
     wp.add_argument("--port", type=int, default=8760)
@@ -188,6 +203,8 @@ def main():
         rebuild_index(a.rebuild if a.rebuild is not None else "")
     elif a.cmd == "doctor":
         doctor()
+    elif a.cmd == "setup":
+        setup()
     elif a.cmd == "contact":
         contact(a.vendor)
     elif a.cmd == "web":

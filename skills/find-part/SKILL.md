@@ -18,8 +18,10 @@ Data dir: `~/.rfshop/` (results.md/json, flags.json, outbox/, caches). Token dis
 {"category": "lna|amplifier|attenuator|termination|circulator|isolator|cable|connector|adapter|feedthrough|filter|mixer|coupler|switch|dc_block|bias_tee|detector",
  "freq_ghz": [4, 8], "temp_k": 4, "gain_db_min": 30, "noise_temp_k_max": 5,
  "attenuation_db": 1, "connector": "SMA", "mount": "bulkhead",
+ "max_lead_weeks": 4, "prefer_vendors": ["XMA"], "exclude_vendors": [],
  "other": ["BeCu inner", "non-magnetic"]}
 ```
+Ask about or infer urgency: "need it this month" → `max_lead_weeks`. If the user has vendor preferences (or standing ones from memory), set `prefer_vendors` (boosted, marked ★) / `exclude_vendors` (dropped).
 
 2. `python3 -m rfshop search ~/.rfshop/spec.json` (timeout 600s; warn the user the FIRST search per category deep-crawls vendors and can take minutes — cached 7 days after). Stdout = tiered markdown table: Tier A (all criteria met) → B (all checkable met, some unverified) → C (one miss) → D (2+ misses), each tier sorted by fit then price.
 
@@ -27,7 +29,7 @@ Data dir: `~/.rfshop/` (results.md/json, flags.json, outbox/, caches). Token dis
 
 4. If flags.json is non-empty (top results with unverified criteria): read it, infer values from each ≤300-char excerpt, write `~/.rfshop/resolutions.json` as `[{"url": "...", "specs": {"freq_ghz": [0,18], "bulkhead": true}}]` — only values you're confident of. Then `python3 -m rfshop rerank ~/.rfshop/resolutions.json`.
 
-5. Present the final tiered table verbatim (user wants MANY options — do not trim tiers). Note vendors that errored and any backstop vendors you couldn't cover.
+5. Present the final tiered table verbatim (user wants MANY options — do not trim tiers). Note vendors that errored and any backstop vendors you couldn't cover. The **Lead** column: `stock`/`orderable` = page-level evidence; `~N wk` = stated lead time; `~N wk (vendor est)` = registry's typical estimate, not part-specific — say so; `custom` = made to order. When lead time matters to the user, flag that RFQ-vendor leads are only confirmed by asking — the RFQ draft already asks.
 
 6. RFQ drafts on request: `python3 -m rfshop contact "<vendor>"` for the address, then write `~/.rfshop/outbox/<vendor>-<part>.txt`:
 ```
