@@ -12,8 +12,6 @@ Built for dilution-refrigerator / quantum-measurement work: cryogenic LNAs, atte
 
 ## Installation (no terminal experience needed)
 
-You'll type a few commands into a *terminal* — a window where you type text commands and press Enter.
-
 **Open a terminal:**
 - **Mac:** press `Cmd+Space`, type `Terminal`, press Enter.
 - **Windows:** press the Windows key, type `PowerShell`, press Enter.
