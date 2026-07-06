@@ -7,7 +7,7 @@ Built for dilution-refrigerator / quantum-measurement shopping: cryogenic LNAs, 
 ## Install
 
 ```bash
-git clone https://github.com/<you>/rfshop && cd rfshop
+git clone https://github.com/KnowingIdea/rfshop && cd rfshop
 pip install -e .
 rfshop setup        # installs the playwright browser + checks vendor registry health
 ```
@@ -17,7 +17,7 @@ Requires Python ≥3.10. That's it — `rfshop web` for the UI, or install the C
 ## Use as a Claude Code plugin (natural-language queries)
 
 ```
-/plugin marketplace add <you>/rfshop
+/plugin marketplace add KnowingIdea/rfshop
 /plugin install rfshop@rfshop
 ```
 
